@@ -12,6 +12,7 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import sqlite3 from 'sqlite3';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -24,6 +25,26 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+
+const sqlite = sqlite3.verbose();
+const db = new sqlite.Database(':memory:');
+
+db.serialize(() => {
+  db.run('CREATE TABLE lorem (info TEXT)');
+
+  const stmt = db.prepare('INSERT INTO lorem VALUES (?)');
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < 10; i++) {
+    stmt.run(`Ipsum ${i}`);
+  }
+  stmt.finalize();
+
+  db.each('SELECT rowid AS id, info FROM lorem', (err, row) => {
+    console.log(`${row.id}: ${row.info}`);
+  });
+});
+
+db.close();
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
