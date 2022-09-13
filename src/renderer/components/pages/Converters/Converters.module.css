@@ -1,0 +1,8 @@
+.inputs {
+  display: flex;
+}
+
+.inputs label {
+  display: flex;
+  flex-direction: column;
+}

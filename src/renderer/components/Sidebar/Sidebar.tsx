@@ -6,13 +6,13 @@ export const Sidebar = () => {
   return (
     <div className={styles.sidebar}>
       <Link className={styles.link} to="/">
-        HOME
+        DEVICES
       </Link>
       <Link className={styles.link} to="/add-tcp-device.html">
-        TCP DEVICES
+        CONVERTERS
       </Link>
       <Link className={styles.link} to="/add-slave-device.html">
-        SLAVE DEVICE
+        SLAVE DEVICES
       </Link>
     </div>
   );

@@ -15,6 +15,15 @@ import log from 'electron-log';
 import sqlite3 from 'sqlite3';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import {
+  deleteConverters,
+  getConverters,
+  initConverters,
+  postConverters,
+} from './sql/converters';
+
+const sqlite = sqlite3.verbose();
+const db = new sqlite.Database(':memory:');
 
 class AppUpdater {
   constructor() {
@@ -26,30 +35,50 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-const sqlite = sqlite3.verbose();
-const db = new sqlite.Database(':memory:');
-
 db.serialize(() => {
-  db.run('CREATE TABLE lorem (info TEXT)');
+  db.run(initConverters);
 
-  const stmt = db.prepare('INSERT INTO lorem VALUES (?)');
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < 10; i++) {
-    stmt.run(`Ipsum ${i}`);
-  }
+  const stmt = db.prepare(postConverters);
+  stmt.run(['device-1', 'tcp', '192.168.1.8:26']);
+  stmt.run(['device-1', 'tcp', '192.168.1.7:26']);
+  stmt.run(['device-1', 'tcp', '192.168.1.9:26']);
   stmt.finalize();
+});
 
-  db.each('SELECT rowid AS id, info FROM lorem', (err, row) => {
-    console.log(`${row.id}: ${row.info}`);
+// db.close();
+
+// ipcMain.on('post-converters', async (event, arg) => {
+//   switch (arg[0]) {
+//
+//     case 'delete': {
+//
+//       break;
+//     }
+//     default:
+//       console.log('IPC converters return default!');
+//   }
+// });
+
+ipcMain.on('get-converters', async (event, _arg) => {
+  db.all(getConverters, (err, rows) => {
+    if (err) return event.reply('get-converters', { err });
+    return event.reply('get-converters', rows);
   });
 });
 
-db.close();
+ipcMain.on('post-converters', async (event, arg) => {
+  const { name, type, address } = arg[0];
+  const stmt = db.prepare(postConverters);
+  stmt.run([name, type, address], (err) => {
+    return event.reply('error', err);
+  });
+  stmt.finalize();
+});
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+ipcMain.on('delete-converters', async (event, arg) => {
+  const stmt = db.prepare(deleteConverters);
+  stmt.run(arg);
+  stmt.finalize();
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -92,7 +121,7 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1524,
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
