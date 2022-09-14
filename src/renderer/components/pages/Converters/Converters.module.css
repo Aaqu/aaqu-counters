@@ -1,8 +1,31 @@
-.inputs {
-  display: flex;
+.converters {
+  border-collapse: collapse;
+  width: 100%;
 }
 
-.inputs label {
-  display: flex;
-  flex-direction: column;
+.converters td,
+.converters th {
+  border: 1px solid #2d2e2e;
+  padding: 8px;
+}
+
+.converters tr:nth-child(even) {
+  background-color: #333636;
+}
+
+.converters tbody tr:hover {
+  background-color: #515757;
+}
+
+.converters th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04aa6d;
+  color: white;
+}
+
+.converters td:last-child {
+  border: none;
+  background-color: #424747;
 }

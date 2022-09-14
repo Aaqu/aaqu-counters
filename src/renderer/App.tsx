@@ -5,6 +5,7 @@ import { Content } from './components/Content/Content';
 import { Devices } from './components/pages/Devices/Devices';
 import { Converters } from './components/pages/Converters/Converters';
 import { Slaves } from './components/pages/Slave/Slaves';
+import { Databases } from './components/pages/Databases/Databases';
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,8 +19,9 @@ export const App = () => {
         <Content>
           <Routes>
             <Route path="/" element={<Devices />} />
-            <Route path="/add-tcp-device.html" element={<Converters />} />
-            <Route path="/add-slave-device.html" element={<Slaves />} />
+            <Route path="/converters.html" element={<Converters />} />
+            <Route path="/slaves.html" element={<Slaves />} />
+            <Route path="/databases.html" element={<Databases />} />
           </Routes>
         </Content>
       </div>

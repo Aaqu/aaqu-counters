@@ -1,13 +1,4 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
-
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -47,18 +38,6 @@ db.serialize(() => {
 
 // db.close();
 
-// ipcMain.on('post-converters', async (event, arg) => {
-//   switch (arg[0]) {
-//
-//     case 'delete': {
-//
-//       break;
-//     }
-//     default:
-//       console.log('IPC converters return default!');
-//   }
-// });
-
 ipcMain.on('get-converters', async (event, _arg) => {
   db.all(getConverters, (err, rows) => {
     if (err) return event.reply('get-converters', { err });
@@ -70,14 +49,20 @@ ipcMain.on('post-converters', async (event, arg) => {
   const { name, type, address } = arg[0];
   const stmt = db.prepare(postConverters);
   stmt.run([name, type, address], (err) => {
-    return event.reply('error', err);
+    return err
+      ? event.reply('error', err)
+      : event.reply('reload-converters', true);
   });
   stmt.finalize();
 });
 
 ipcMain.on('delete-converters', async (event, arg) => {
   const stmt = db.prepare(deleteConverters);
-  stmt.run(arg);
+  stmt.run(arg, (err) => {
+    return err
+      ? event.reply('error', err)
+      : event.reply('reload-converters', true);
+  });
   stmt.finalize();
 });
 

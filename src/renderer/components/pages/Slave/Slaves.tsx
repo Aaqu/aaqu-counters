@@ -1,3 +1,9 @@
+import { TcpPort } from '../../TcpPort/TcpPort';
+
 export const Slaves = () => {
-  return <div>sdadas</div>;
+  return (
+    <div>
+      <TcpPort />
+    </div>
+  );
 };

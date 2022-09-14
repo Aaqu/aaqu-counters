@@ -4,6 +4,7 @@ export type Channels =
   | 'post-converters'
   | 'get-converters'
   | 'delete-converters'
+  | 'reload-converters'
   | 'error';
 
 contextBridge.exposeInMainWorld('electron', {
