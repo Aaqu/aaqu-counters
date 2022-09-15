@@ -1,8 +1,8 @@
-.tcp-port input {
-  width: 20em;
+.tcpPort input {
+  width: 3em;
 }
 
-.tcp-port input::-webkit-outer-spin-button,
+.tcpPort input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;

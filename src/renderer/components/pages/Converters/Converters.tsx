@@ -1,21 +1,25 @@
-import { FormEvent, SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import { TcpPort } from '../../TcpPort/TcpPort';
 
 import styles from './Converters.module.css';
 
 export const Converters = () => {
   const [table, setTable] = useState(<></>);
 
-  function removeConverter(e: SyntheticEvent) {
+  function removeConverter(event: { target: { value: string } }) {
     window.electron.ipcRenderer.sendMessage('delete-converters', [
-      e.target.value,
+      event.target.value,
     ]);
   }
 
   function getConverters() {
     window.electron.ipcRenderer.sendMessage('get-converters');
     window.electron.ipcRenderer.once('get-converters', (args) => {
-      console.log(args);
+      // console.log(args);
+
       setTable(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         args.map(
           (
             row: { id: number; name: string; type: string; address: string },
@@ -29,6 +33,8 @@ export const Converters = () => {
                 <td>{type}</td>
                 <td>{address}</td>
                 <td>
+                  {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                  {/* @ts-ignore */}
                   <button type="button" value={id} onClick={removeConverter}>
                     remove
                   </button>
@@ -43,6 +49,7 @@ export const Converters = () => {
 
   function addConverter(e: SyntheticEvent) {
     e.preventDefault();
+    // console.log(e.target.elements)
     const target = e.target as typeof e.target & {
       name: { value: string };
       type: { value: string };
@@ -106,12 +113,7 @@ export const Converters = () => {
             />
           </td>
           <td>
-            <input
-              form="new-device"
-              type="text"
-              name="address"
-              defaultValue="192.168.1.8:26"
-            />
+            <TcpPort form="new-device" name="address" />
           </td>
           <td>
             <input form="new-device" type="submit" value="ADD" />
