@@ -1,7 +1,7 @@
 export const Devices = () => {
   return (
     <div>
-      <h1>DEVICES LIST</h1>
+      <h1>DEVICES INFO</h1>
     </div>
   );
 };

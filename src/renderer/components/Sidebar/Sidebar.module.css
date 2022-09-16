@@ -5,6 +5,7 @@
   flex-direction: column;
   gap: 5px;
   padding: 5px;
+  border-right: solid 1px #afafaf;
 }
 
 .link {
