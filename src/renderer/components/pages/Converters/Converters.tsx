@@ -1,8 +1,8 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { Table } from '../../Table/Table';
-import { TcpPortInput } from '../../TcpPortInput/TcpPortInput';
+import { Table } from '../../other/Table/Table';
+import { TcpPortInput } from '../../other/TcpPortInput/TcpPortInput';
 
-import tableStyles from '../../Table/Table.module.css';
+import tableStyles from '../../other/Table/Table.module.css';
 
 export const Converters = () => {
   const [table, setTable] = useState(<></>);

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Table } from 'renderer/components/Table/Table';
-import { Select } from '../../Select/Select';
+import { Table } from 'renderer/components/other/Table/Table';
+import { Select } from '../../other/Select/Select';
 
-import tableStyles from '../../Table/Table.module.css';
+import tableStyles from '../../other/Table/Table.module.css';
 
 const types = [
   { value: 'dmm-5t-3', label: 'dmm-5t-3' },

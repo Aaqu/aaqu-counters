@@ -1,7 +1,7 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { Sidebar } from './components/Sidebar/Sidebar';
-import { Content } from './components/Content/Content';
+import { Sidebar } from './components/layout/Sidebar/Sidebar';
+import { Content } from './components/layout/Content/Content';
 import { Devices } from './components/pages/Devices/Devices';
 import { Converters } from './components/pages/Converters/Converters';
 import { Slaves } from './components/pages/Slave/Slaves';
