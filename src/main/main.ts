@@ -17,15 +17,14 @@ import {
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
-// const dbPath = path.join(app.getPath('userData'), 'sql.db');
-//
-// console.log('exist', existsSync(dbPath));
-// if (!isDebug && !existsSync(dbPath)) {
-//   writeFile(dbPath, '', () => {});
-// }
+const dbPath = path.join(app.getPath('userData'), 'sql.db');
+
+if (!isDebug && !existsSync(dbPath)) {
+  writeFile(dbPath, '', () => {});
+}
 
 const sqlite = sqlite3.verbose();
-const db = new sqlite.Database(':memory:');
+const db = new sqlite.Database(isDebug ? ':memory:' : dbPath);
 
 class AppUpdater {
   constructor() {
