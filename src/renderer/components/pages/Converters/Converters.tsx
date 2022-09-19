@@ -1,7 +1,8 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { TcpPort } from '../../TcpPort/TcpPort';
+import { Table } from '../../Table/Table';
+import { TcpPortInput } from '../../TcpPortInput/TcpPortInput';
 
-import styles from './Converters.module.css';
+import tableStyles from '../../Table/Table.module.css';
 
 export const Converters = () => {
   const [table, setTable] = useState(<></>);
@@ -35,7 +36,12 @@ export const Converters = () => {
                 <td>
                   {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                   {/* @ts-ignore */}
-                  <button type="button" value={id} onClick={removeConverter}>
+                  <button
+                    className={tableStyles.btnDanger}
+                    type="button"
+                    value={id}
+                    onClick={removeConverter}
+                  >
                     remove
                   </button>
                 </td>
@@ -79,13 +85,15 @@ export const Converters = () => {
   }, []);
 
   return (
-    <table className={styles.converters}>
+    <Table>
       <thead>
         <tr>
           <th>id</th>
           <th>name</th>
           <th>type</th>
           <th>address</th>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <th />
         </tr>
       </thead>
       <tbody>{table}</tbody>
@@ -102,6 +110,7 @@ export const Converters = () => {
               type="text"
               name="name"
               defaultValue="device"
+              required
             />
           </td>
           <td>
@@ -110,16 +119,23 @@ export const Converters = () => {
               type="text"
               name="type"
               defaultValue="tcp"
+              required
             />
           </td>
           <td>
-            <TcpPort form="new-device" name="address" />
+            <TcpPortInput form="new-device" name="address" />
           </td>
           <td>
-            <input form="new-device" type="submit" value="ADD" />
+            <button
+              className={tableStyles.btnSuccess}
+              form="new-device"
+              type="submit"
+            >
+              Add
+            </button>
           </td>
         </tr>
       </tfoot>
-    </table>
+    </Table>
   );
 };

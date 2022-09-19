@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { Table } from 'renderer/components/Table/Table';
 import { Select } from '../../Select/Select';
 
-import styles from './Slaves.module.css';
+import tableStyles from '../../Table/Table.module.css';
 
-const database = [
+const types = [
   { value: 'dmm-5t-3', label: 'dmm-5t-3' },
   { value: 'other', label: 'other' },
 ];
+
+const converters = [{ value: '192.168.1.8:8', label: 'converter-1' }];
 
 export const Slaves = () => {
   const [tbody, setTbody] = useState(<></>);
@@ -17,13 +20,16 @@ export const Slaves = () => {
   };
 
   return (
-    <table className={styles.table}>
+    <Table>
       <thead>
         <tr>
           <th>id</th>
           <th>name</th>
           <th>type</th>
           <th>address</th>
+          <th>converter</th>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <th />
         </tr>
       </thead>
       <tbody>{tbody}</tbody>
@@ -36,7 +42,6 @@ export const Slaves = () => {
           </td>
           <td>
             <input
-              className={styles.input}
               form="new-slave"
               type="text"
               name="name"
@@ -45,11 +50,10 @@ export const Slaves = () => {
             />
           </td>
           <td>
-            <Select form="new-slave" name="type" options={database} />
+            <Select form="new-slave" name="type" options={types} />
           </td>
           <td>
             <input
-              className={styles.input}
               form="new-slave"
               type="number"
               name="name"
@@ -60,12 +64,19 @@ export const Slaves = () => {
             />
           </td>
           <td>
-            <button form="new-slave" type="submit">
+            <Select form="new-slave" name="converter" options={converters} />
+          </td>
+          <td>
+            <button
+              className={tableStyles.btnSuccess}
+              form="new-slave"
+              type="submit"
+            >
               Add
             </button>
           </td>
         </tr>
       </tfoot>
-    </table>
+    </Table>
   );
 };
