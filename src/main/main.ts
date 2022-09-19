@@ -4,6 +4,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import sqlite3 from 'sqlite3';
+import { writeFile, existsSync } from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
@@ -12,6 +13,16 @@ import {
   initConverters,
   postConverters,
 } from './sql/converters';
+
+const isDebug =
+  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
+// const dbPath = path.join(app.getPath('userData'), 'sql.db');
+//
+// console.log('exist', existsSync(dbPath));
+// if (!isDebug && !existsSync(dbPath)) {
+//   writeFile(dbPath, '', () => {});
+// }
 
 const sqlite = sqlite3.verbose();
 const db = new sqlite.Database(':memory:');
@@ -70,9 +81,6 @@ if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
-
-const isDebug =
-  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDebug) {
   require('electron-debug')();
