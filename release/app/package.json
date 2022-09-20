@@ -1,7 +1,7 @@
 {
   "name": "aaqu-counters",
   "version": "0.1.0",
-  "description": "Simple app to connect for collect data from devices",
+  "description": "Simple app to connect devices for collect data",
   "license": "MIT",
   "author": {
     "name": "Mazur Albet",
