@@ -4,7 +4,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import sqlite3 from 'sqlite3';
-import { writeFile, existsSync } from 'fs';
+import { existsSync, openSync } from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
@@ -13,18 +13,35 @@ import {
   initConverters,
   postConverters,
 } from './sql/converters';
+import { getDbVersion, initDbVersion, postDbVersion } from './sql/db-version';
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 const dbPath = path.join(app.getPath('userData'), 'sql.db');
-
 if (!isDebug && !existsSync(dbPath)) {
-  writeFile(dbPath, '', () => {});
+  openSync(dbPath, 'w');
 }
-
 const sqlite = sqlite3.verbose();
 const db = new sqlite.Database(isDebug ? ':memory:' : dbPath);
+
+db.serialize(() => {
+  db.run(initDbVersion);
+  db.run(initConverters);
+
+  db.all(getDbVersion, (_err, rows) => {
+    console.log(rows);
+    if (rows.length === 0) {
+      const stmtConverters = db.prepare(postConverters);
+      stmtConverters.run(['device-1', 'tcp', '192.168.1.8:26']);
+      stmtConverters.finalize();
+
+      const stmtInit = db.prepare(postDbVersion);
+      stmtInit.run([true, '0.1.0']);
+      stmtInit.finalize();
+    }
+  });
+});
 
 class AppUpdater {
   constructor() {
@@ -35,18 +52,6 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-db.serialize(() => {
-  db.run(initConverters);
-
-  const stmt = db.prepare(postConverters);
-  stmt.run(['device-1', 'tcp', '192.168.1.8:26']);
-  stmt.run(['device-1', 'tcp', '192.168.1.7:26']);
-  stmt.run(['device-1', 'tcp', '192.168.1.9:26']);
-  stmt.finalize();
-});
-
-// db.close();
 
 ipcMain.on('get-converters', async (event, _arg) => {
   db.all(getConverters, (err, rows) => {
@@ -163,6 +168,7 @@ app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
   if (process.platform !== 'darwin') {
+    db.close();
     app.quit();
   }
 });

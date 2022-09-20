@@ -1,5 +1,5 @@
 export const initConverters = `
-  CREATE TABLE converters (
+  CREATE TABLE IF NOT EXISTS converters (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     type TEXT NOT NULL,
