@@ -14,6 +14,16 @@ import {
   postConverters,
 } from './sql/converters';
 import { getDbVersion, initDbVersion, postDbVersion } from './sql/db-version';
+import {
+  getDeviceTypes,
+  initDeviceTypes,
+  postDeviceTypes,
+} from './sql/devices-types';
+import {
+  getConnectionTypes,
+  initConnectionTypes,
+  postConnectionTypes,
+} from './sql/converter-types';
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -27,6 +37,8 @@ const db = new sqlite.Database(isDebug ? ':memory:' : dbPath);
 
 db.serialize(() => {
   db.run(initDbVersion);
+  db.run(initConnectionTypes);
+  db.run(initDeviceTypes);
   db.run(initConverters);
 
   db.all(getDbVersion, (_err, rows) => {
@@ -36,9 +48,18 @@ db.serialize(() => {
       stmtConverters.run(['device-1', 'tcp', '192.168.1.8:26']);
       stmtConverters.finalize();
 
-      const stmtInit = db.prepare(postDbVersion);
-      stmtInit.run([true, '0.1.0']);
-      stmtInit.finalize();
+      const stmtConnectionTypes = db.prepare(postConnectionTypes);
+      stmtConnectionTypes.run('tcp');
+      stmtConnectionTypes.finalize();
+
+      const stmtDeviceTypes = db.prepare(postDeviceTypes);
+      stmtDeviceTypes.run('dmm-5t-3');
+      stmtDeviceTypes.run('lec5');
+      stmtDeviceTypes.finalize();
+
+      const stmtDbVersion = db.prepare(postDbVersion);
+      stmtDbVersion.run([true, '0.1.0']);
+      stmtDbVersion.finalize();
     }
   });
 });
@@ -52,6 +73,34 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+
+ipcMain.on('get-connection-types', async (event, _arg) => {
+  db.all(getConnectionTypes, (err, rows) => {
+    if (err) {
+      return event.reply('get-connection-types', {
+        err: 'Cannot get connection types',
+      });
+    }
+    const data = rows.map(({ id, type }) => {
+      return { id, value: type, label: type };
+    });
+    return event.reply('get-connection-types', data);
+  });
+});
+
+ipcMain.on('get-device-types', async (event, _arg) => {
+  db.all(getDeviceTypes, (err, rows) => {
+    if (err) {
+      return event.reply('get-device-types', {
+        err: 'Cannot get device types',
+      });
+    }
+    const data = rows.map(({ id, type }) => {
+      return { id, value: type, label: type };
+    });
+    return event.reply('get-device-types', data);
+  });
+});
 
 ipcMain.on('get-converters', async (event, _arg) => {
   db.all(getConverters, (err, rows) => {

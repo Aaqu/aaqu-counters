@@ -1,11 +1,13 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { Table } from '../../other/Table/Table';
 import { TcpPortInput } from '../../other/TcpPortInput/TcpPortInput';
+import { Select } from '../../other/Select/Select';
 
 import tableStyles from '../../other/Table/Table.module.css';
 
 export const Converters = () => {
   const [table, setTable] = useState(<></>);
+  const [connectionTypes, setConnectionTypes] = useState([]);
 
   function removeConverter(event: { target: { value: string } }) {
     window.electron.ipcRenderer.sendMessage('delete-converters', [
@@ -16,20 +18,20 @@ export const Converters = () => {
   function getConverters() {
     window.electron.ipcRenderer.sendMessage('get-converters');
     window.electron.ipcRenderer.once('get-converters', (args) => {
-      // console.log(args);
-
       setTable(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         args.map(
-          (
-            row: { id: number; name: string; type: string; address: string },
-            index: number
-          ) => {
+          (row: {
+            id: number;
+            name: string;
+            type: string;
+            address: string;
+          }) => {
             const { id, name, type, address } = row;
             return (
               <tr key={id}>
-                <td>{index + 1}</td>
+                <td>{id}</td>
                 <td>{name}</td>
                 <td>{type}</td>
                 <td>{address}</td>
@@ -53,6 +55,13 @@ export const Converters = () => {
     });
   }
 
+  function getConnectionTypes() {
+    window.electron.ipcRenderer.sendMessage('get-connection-types');
+    window.electron.ipcRenderer.once('get-connection-types', (args) => {
+      setConnectionTypes(args);
+    });
+  }
+
   function addConverter(e: SyntheticEvent) {
     e.preventDefault();
     // console.log(e.target.elements)
@@ -72,6 +81,7 @@ export const Converters = () => {
   }
 
   useEffect(() => {
+    getConnectionTypes();
     getConverters();
 
     window.electron.ipcRenderer.on('reload-converters', () => {
@@ -100,13 +110,13 @@ export const Converters = () => {
       <tfoot>
         <tr>
           <td>
-            <form onSubmit={addConverter} id="new-device">
+            <form onSubmit={addConverter} id="new-converter">
               new
             </form>
           </td>
           <td>
             <input
-              form="new-device"
+              form="new-converter"
               type="text"
               name="name"
               defaultValue="device"
@@ -114,21 +124,19 @@ export const Converters = () => {
             />
           </td>
           <td>
-            <input
-              form="new-device"
-              type="text"
+            <Select
+              form="new-converter"
               name="type"
-              defaultValue="tcp"
-              required
+              options={connectionTypes}
             />
           </td>
           <td>
-            <TcpPortInput form="new-device" name="address" />
+            <TcpPortInput form="new-converter" name="address" />
           </td>
           <td>
             <button
               className={tableStyles.btnSuccess}
-              form="new-device"
+              form="new-converter"
               type="submit"
             >
               Add

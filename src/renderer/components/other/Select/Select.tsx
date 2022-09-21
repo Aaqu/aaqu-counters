@@ -4,12 +4,14 @@ export const Select = (props) => {
   // eslint-disable-next-line react/prop-types
   const { options, name, form } = props;
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const createOptions = (options: { value: string; label: string }[]) => {
+  const createOptions = (
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    options: { id: number; value: string; label: string }[]
+  ) => {
     // eslint-disable-next-line react/prop-types
-    return options.map(({ value, label }) => {
+    return options.map(({ id, value, label }) => {
       return (
-        <option key={value} value={value}>
+        <option key={id} value={value}>
           {label}
         </option>
       );

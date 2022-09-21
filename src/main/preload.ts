@@ -5,6 +5,8 @@ export type Channels =
   | 'get-converters'
   | 'delete-converters'
   | 'reload-converters'
+  | 'get-connection-types'
+  | 'get-device-types'
   | 'error';
 
 contextBridge.exposeInMainWorld('electron', {
