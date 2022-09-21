@@ -1,23 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from 'renderer/components/other/Table/Table';
 import { Select } from '../../other/Select/Select';
 
 import tableStyles from '../../other/Table/Table.module.css';
 
-const types = [
-  { value: 'dmm-5t-3', label: 'dmm-5t-3' },
-  { value: 'other', label: 'other' },
-];
-
 const converters = [{ value: '192.168.1.8:8', label: 'converter-1' }];
 
 export const Slaves = () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const [tbody, setTbody] = useState(<></>);
+  const [deviceTypes, setDeviceTypes] = useState([]);
 
-  const addSlave = (event) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  function addSlave(event) {
     event.preventDefault();
     console.log(event.target.elements);
-  };
+  }
+
+  function getDeviceTypes() {
+    window.electron.ipcRenderer.sendMessage('get-device-types');
+    window.electron.ipcRenderer.once('get-device-types', (args) => {
+      setDeviceTypes(args);
+    });
+  }
+
+  useEffect(() => {
+    getDeviceTypes();
+  }, []);
 
   return (
     <Table>
@@ -50,7 +61,7 @@ export const Slaves = () => {
             />
           </td>
           <td>
-            <Select form="new-slave" name="type" options={types} />
+            <Select form="new-slave" name="type" options={deviceTypes} />
           </td>
           <td>
             <input
