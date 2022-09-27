@@ -11,7 +11,7 @@ export const Converters = () => {
 
   function removeConverter(event: { target: { value: string } }) {
     window.electron.ipcRenderer.sendMessage('delete-converters', [
-      event.target.value,
+      { id: event.target.value },
     ]);
   }
 

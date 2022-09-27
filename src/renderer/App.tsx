@@ -4,7 +4,7 @@ import { Sidebar } from './components/layout/Sidebar/Sidebar';
 import { Content } from './components/layout/Content/Content';
 import { Devices } from './components/pages/Devices/Devices';
 import { Converters } from './components/pages/Converters/Converters';
-import { Slaves } from './components/pages/Slave/Slaves';
+import { Slaves } from './components/pages/Slaves/Slaves';
 import { Databases } from './components/pages/Databases/Databases';
 
 import './App.css';

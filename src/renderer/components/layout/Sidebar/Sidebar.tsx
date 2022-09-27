@@ -27,7 +27,7 @@ export const Sidebar = () => {
         }
         to="/slaves.html"
       >
-        SLAVE DEVICES
+        SLAVES
       </NavLink>
       <NavLink
         className={({ isActive }) =>

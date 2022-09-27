@@ -4,7 +4,7 @@ import { Select } from '../../other/Select/Select';
 
 import tableStyles from '../../other/Table/Table.module.css';
 
-const converters = [{ value: '192.168.1.8:8', label: 'converter-1' }];
+const converters = [{ id: 1, value: '192.168.1.8:8', label: 'converter-1' }];
 
 export const Slaves = () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
