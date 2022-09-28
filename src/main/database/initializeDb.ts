@@ -22,6 +22,12 @@ import {
   ipcPostConverters,
   postConverters,
 } from './sql/converters';
+import {
+  createTableSlaves,
+  ipcDeleteSlaves,
+  ipcGetSlaves,
+  ipcPostSlaves,
+} from './sql/slaves';
 
 export async function initializeHeadDb(path: string) {
   log.info(`INFO: Initializing head db`);
@@ -31,6 +37,7 @@ export async function initializeHeadDb(path: string) {
   await createTableConnectionTypes(headDb);
   await createTableDeviceTypes(headDb);
   await createTableConverters(headDb);
+  await createTableSlaves(headDb);
 
   const dbVersion = await getDbVersion(headDb);
   if (dbVersion.length === 0) {
@@ -52,4 +59,7 @@ export async function initializeHeadDb(path: string) {
   ipcGetConverters(headDb);
   ipcPostConverters(headDb);
   ipcDeleteConverters(headDb);
+  ipcGetSlaves(headDb);
+  ipcPostSlaves(headDb);
+  ipcDeleteSlaves(headDb);
 }

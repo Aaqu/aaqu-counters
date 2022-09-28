@@ -5,6 +5,10 @@ export type Channels =
   | 'get-converters'
   | 'delete-converters'
   | 'reload-converters'
+  | 'post-slaves'
+  | 'get-slaves'
+  | 'delete-slaves'
+  | 'reload-slaves'
   | 'get-connection-types'
   | 'get-device-types'
   | 'error';
