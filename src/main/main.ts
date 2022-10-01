@@ -120,7 +120,8 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    initializeHeadDb(isDebug ? ':memory:' : dbPath);
+    // initializeHeadDb(isDebug ? ':memory:' : dbPath);
+    initializeHeadDb(dbPath);
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

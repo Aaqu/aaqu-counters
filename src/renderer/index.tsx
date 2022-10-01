@@ -10,6 +10,10 @@ window.electron.ipcRenderer.on('error', (err) => {
   return toast.error(err.message);
 });
 
+window.electron.ipcRenderer.on('info', (err) => {
+  return toast.info(err.message);
+});
+
 // calling IPC exposed from preload script
 // window.electron.ipcRenderer.once('ipc-example', (arg) => {
 //   // eslint-disable-next-line no-console

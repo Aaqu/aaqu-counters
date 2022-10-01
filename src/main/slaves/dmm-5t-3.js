@@ -1,6 +1,6 @@
 import { tcp as modbusTcp } from 'modbus-stream';
 
-class Dmm5t3 {
+export class Dmm5t3 {
   constructor(options) {
     this.options = options;
     this.connection = false;
@@ -112,21 +112,15 @@ class Dmm5t3 {
 }
 
 // test
-const test = new Dmm5t3({
-  ip: '192.168.1.8',
-  port: 26,
-  unitId: 1,
-});
-
-(async () => {
-  if (await test.connect()) {
-    setInterval(async () => {
-      const start = +Date.now();
-      const response = await test.read();
-      console.log({
-        stop: `${+Date.now() - start}ms`,
-        response: response[33],
-      });
-    }, 1000);
-  }
-})();
+// (async () => {
+//   if (await test.connect()) {
+//     setInterval(async () => {
+//       const start = +Date.now();
+//       const response = await test.read();
+//       console.log({
+//         stop: `${+Date.now() - start}ms`,
+//         response: response,
+//       });
+//     }, 1000);
+//   }
+// })();

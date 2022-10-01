@@ -1,17 +1,17 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels =
-  | 'post-converters'
-  | 'get-converters'
-  | 'delete-converters'
-  | 'reload-converters'
-  | 'post-slaves'
-  | 'get-slaves'
-  | 'delete-slaves'
-  | 'reload-slaves'
-  | 'get-connection-types'
-  | 'get-device-types'
-  | 'error';
+  // | 'post-converters'
+  // | 'get-converters'
+  // | 'delete-converters'
+  // | 'reload-converters'
+  // | 'post-slaves'
+  // | 'get-slaves'
+  // | 'delete-slaves'
+  // | 'reload-slaves'
+  // | 'get-connection-types'
+  // | 'get-device-types'
+  'dmm-start' | 'dmm-stop' | 'info' | 'error';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

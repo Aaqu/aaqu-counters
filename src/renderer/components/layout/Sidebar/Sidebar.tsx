@@ -13,30 +13,30 @@ export const Sidebar = () => {
       >
         DEVICES
       </NavLink>
-      <NavLink
-        className={({ isActive }) =>
-          isActive ? `${styles.link} ${styles.active}` : styles.link
-        }
-        to="/converters.html"
-      >
-        CONVERTERS
-      </NavLink>
-      <NavLink
-        className={({ isActive }) =>
-          isActive ? `${styles.link} ${styles.active}` : styles.link
-        }
-        to="/slaves.html"
-      >
-        SLAVES
-      </NavLink>
-      <NavLink
-        className={({ isActive }) =>
-          isActive ? `${styles.link} ${styles.active}` : styles.link
-        }
-        to="/databases.html"
-      >
-        DATABASES
-      </NavLink>
+      {/* <NavLink */}
+      {/*   className={({ isActive }) => */}
+      {/*     isActive ? `${styles.link} ${styles.active}` : styles.link */}
+      {/*   } */}
+      {/*   to="/converters.html" */}
+      {/* > */}
+      {/*   CONVERTERS */}
+      {/* </NavLink> */}
+      {/* <NavLink */}
+      {/*   className={({ isActive }) => */}
+      {/*     isActive ? `${styles.link} ${styles.active}` : styles.link */}
+      {/*   } */}
+      {/*   to="/slaves.html" */}
+      {/* > */}
+      {/*   SLAVES */}
+      {/* </NavLink> */}
+      {/* <NavLink */}
+      {/*   className={({ isActive }) => */}
+      {/*     isActive ? `${styles.link} ${styles.active}` : styles.link */}
+      {/*   } */}
+      {/*   to="/databases.html" */}
+      {/* > */}
+      {/*   DATABASES */}
+      {/* </NavLink> */}
     </div>
   );
 };
