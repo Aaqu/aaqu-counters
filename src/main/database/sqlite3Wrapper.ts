@@ -47,3 +47,22 @@ export async function prepared(
     });
   });
 }
+export async function preparedAll(
+  db: sqlite3.Database,
+  query: string,
+  params: any[]
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare(query);
+    stmt.all(...params, (err: Error, res: any) => {
+      if (err) {
+        log.error(err);
+        stmt.finalize();
+        reject(err);
+        return;
+      }
+      stmt.finalize();
+      resolve(res);
+    });
+  });
+}

@@ -1,14 +1,19 @@
 import log from 'electron-log';
-import { ipcMain } from 'electron';
+import { dialog, ipcMain } from 'electron';
+import fs from 'fs';
 import { initializeDB } from './db';
 import {
   createTableDbVersion,
   getDbVersion,
   postDbVersion,
 } from './sql/dbVersion';
-import { createTableDmm5t3, postDmm5t3 } from './sql/dmm-5t-3';
+import {
+  createTableDmm5t3,
+  getDmm5t3,
+  getDmm5t3Names,
+  postDmm5t3,
+} from './sql/dmm-5t-3';
 import { Dmm5t3 } from '../slaves/dmm-5t-3';
-
 // import {
 //   createTableDeviceTypes,
 //   ipcGetDeviceTypes,
@@ -87,6 +92,7 @@ export async function initializeHeadDb(path: string) {
             stop: `${+Date.now() - start}ms`,
             response: response[33],
           });
+          event.reply('dmm-read', response);
           await postDmm5t3(headDb, [args[0].sample, ...response]);
         }, 1000);
       } else {
@@ -105,6 +111,49 @@ export async function initializeHeadDb(path: string) {
     console.log('stop');
     clearInterval(interval);
     interval = undefined;
+  });
+
+  ipcMain.on('dmm-export', async (event, args) => {
+    console.log('export');
+
+    const result = await dialog.showOpenDialog({
+      properties: ['openFile', 'openDirectory'],
+    });
+    console.log(result);
+    if (!result.canceled) {
+      event.reply('info', { message: `start export` });
+      const names = await getDmm5t3Names(headDb);
+      const namesDate = names
+        .reduce((prev, curr) => {
+          prev.push(curr.name);
+          return prev;
+        }, [])
+        .join(',');
+
+      const response = await getDmm5t3(headDb, { sample: args[0].sample });
+      const date = response
+        .reduce((prev, curr) => {
+          prev.push(Object.values(curr).join(','));
+          return prev;
+        }, [])
+        .join('\n');
+
+      // console.log();
+      const fileName = `sample_${args[0].sample}_${+Date.now()}.csv`;
+      fs.writeFile(
+        `${result.filePaths}\\${fileName}`,
+        `${namesDate}\n${date}`,
+        (err) => {
+          if (err) {
+            event.reply('error', { message: `cannot save file: ${fileName}` });
+            return;
+          }
+          event.reply('info', { message: `save file: ${fileName}` });
+        }
+      );
+    } else {
+      event.reply('info', { message: `canceled export` });
+    }
   });
 
   // ipcDmmStart(headDb, interval);

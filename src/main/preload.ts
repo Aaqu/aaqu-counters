@@ -11,7 +11,7 @@ export type Channels =
   // | 'reload-slaves'
   // | 'get-connection-types'
   // | 'get-device-types'
-  'dmm-start' | 'dmm-stop' | 'info' | 'error';
+  'dmm-start' | 'dmm-stop' | 'dmm-read' | 'dmm-export' | 'info' | 'error';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
