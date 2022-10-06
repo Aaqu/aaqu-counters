@@ -10,7 +10,9 @@ import {
 import {
   createTableDmm5t3,
   getDmm5t3,
+  getDmm5t3Chart,
   getDmm5t3Names,
+  getDmm5t3Samples,
   postDmm5t3,
 } from './sql/dmm-5t-3';
 import { Dmm5t3 } from '../slaves/dmm-5t-3';
@@ -154,6 +156,25 @@ export async function initializeHeadDb(path: string) {
     } else {
       event.reply('info', { message: `canceled export` });
     }
+  });
+
+  ipcMain.on('dmm-chart', async (event, args) => {
+    const response = await getDmm5t3Chart(headDb, { sample: args[0].sample });
+    const datasets = response.map((row) => Object.values(row));
+    const labels = Object.keys(response[0]);
+    labels.shift();
+    event.reply('dmm-chart', {
+      datasets,
+      labels,
+    });
+  });
+
+  ipcMain.on('dmm-samples', async (event) => {
+    const response = await getDmm5t3Samples(headDb);
+    const samples = response.map(({ sample }) => {
+      return { id: sample, value: sample, label: sample };
+    });
+    event.reply('dmm-samples', samples);
   });
 
   // ipcDmmStart(headDb, interval);

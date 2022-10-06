@@ -63,7 +63,7 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1524,
+    width: 1024,
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
@@ -102,7 +102,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  //new AppUpdater();
 };
 
 /**

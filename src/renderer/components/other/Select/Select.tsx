@@ -2,7 +2,7 @@ import styles from './Select.module.css';
 
 export const Select = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { options, name, form } = props;
+  const { options, name, form, onChange } = props;
 
   const createOptions = (
     // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -19,7 +19,13 @@ export const Select = (props) => {
   };
 
   return (
-    <select className={styles.select} name={name} form={form} required>
+    <select
+      className={styles.select}
+      name={name}
+      form={form}
+      onChange={onChange}
+      required
+    >
       <option value="">none</option>
       {createOptions(options)}
     </select>

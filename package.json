@@ -90,15 +90,19 @@
     }
   },
   "dependencies": {
+    "chart.js": "^3.9.1",
+    "chartjs-adapter-luxon": "^1.2.0",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^5.2.2",
-    "json2csv": "^5.0.7",
+    "luxon": "^3.0.4",
     "modbus-stream": "^0.46.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
-    "react-toastify": "^9.0.8"
+    "react-toastify": "^9.0.8",
+    "serialport": "^10.4.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
@@ -170,7 +174,7 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ElectronReact",
+    "productName": "aaqu-counters",
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",

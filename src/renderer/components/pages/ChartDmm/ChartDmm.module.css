@@ -1,0 +1,40 @@
+.form {
+  padding-top: 5px;
+  padding-left: 5px;
+  width: 200px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+}
+.legend {
+  padding: 5px;
+  width: calc(100% - 10px);
+  height: 80px;
+}
+
+.chart {
+  padding: 5px;
+  width: calc(100% - 10px);
+  height: calc(100% - 135px);
+  color: #000;
+  background: #e8ebe1;
+}
+
+.button {
+  color: white;
+  border: none;
+  margin: 1px;
+  padding: 3px;
+  min-width: 50px;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #6c6c6c;
+}
+
+.button:hover {
+  background-color: #8a8a8a;
+}
+
+.pressed {
+  background-color: #57988b;
+}

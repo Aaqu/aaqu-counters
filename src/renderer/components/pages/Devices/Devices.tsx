@@ -407,10 +407,10 @@ export const Devices = () => {
         </div>
 
         <div>
-          <button type="submit" disabled={started}>
+          <button className={styles.button} type="submit" disabled={started}>
             START READ
           </button>
-          <button type="button" onClick={stop}>
+          <button className={styles.button} type="button" onClick={stop}>
             START STOP
           </button>
         </div>
@@ -425,7 +425,7 @@ export const Devices = () => {
           <div>sample number</div>
           <input type="number" name="sample" min="1" required />
         </label>
-        <button type="submit" disabled={started}>
+        <button className={styles.button} type="submit" disabled={started}>
           Save
         </button>
       </form>

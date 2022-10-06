@@ -179,6 +179,93 @@ export async function getDmm5t3Names(db: sqlite3.Database) {
   return sqlite3Wrapper.all(db, SQL);
 }
 
+export async function getDmm5t3Chart(
+  db: sqlite3.Database,
+  values: { sample: number }
+) {
+  const { sample } = values;
+
+  const SQL = `
+    SELECT 
+      czas,
+      napiecie_l1,
+      napiecie_l2,
+      napiecie_l3,
+      napiecie_l12,
+      napiecie_l23,
+      napiecie_l31,
+      prad_l1,
+      prad_l2,
+      prad_l3,
+      czestotliwosc_l1,
+      czestotliwosc_l2,
+      czestotliwosc_l3,
+      moc_czynna_l1,
+      moc_czynna_l2,
+      moc_czynna_l3,
+      calkowita_moc_czynna,
+      moc_bierna_l1,
+      moc_bierna_l2,
+      moc_bierna_l3,
+      calkowita_moc_bierna,
+      moc_pozorna_l1,
+      moc_pozorna_l2,
+      moc_pozorna_l3,
+      calkowita_moc_pozorna,
+      cos_phi_l1,
+      cos_phi_l2,
+      cos_phi_l3,
+      wspolczynnik_mocy_l1,
+      wspolczynnik_mocy_l2,
+      wspolczynnik_mocy_l3,
+      calkowity_wspolczynnik_mocy,
+      energia_czynna_pobrana_l1,
+      energia_czynna_pobrana_l2,
+      energia_czynna_pobrana_l3,
+      calkowita_energia_czynna_pobrana,
+      energia_czynna_oddana_l1,
+      energia_czynna_oddana_l2,
+      energia_czynna_oddana_l3,
+      calkowita_energia_czynna_oddana,
+      energia_indukcyjna_l1,
+      energia_indukcyjna_l2,
+      energia_indukcyjna_l3,
+      calkowita_energia_indukcyjna,
+      energia_pojemnosciowa_l1,
+      energia_pojemnosciowa_l2,
+      energia_pojemnosciowa_l3,
+      calkowita_energia_pojemnosciowa,
+      energia_pozorna_l1,
+      energia_pozorna_l2,
+      energia_pozorna_l3,
+      calkowita_energia_pozorna,
+      thdv_l1,
+      thdv_l2,
+      thdv_l3,
+      thdv_3p,
+      thdi_l1,
+      thdi_l2,
+      thdi_l3,
+      thdi_3p
+    FROM dmm5t3 
+    WHERE sample = ? 
+    ORDER BY id
+  `;
+
+  return sqlite3Wrapper.preparedAll(db, SQL, [sample]);
+}
+
+export async function getDmm5t3Samples(db: sqlite3.Database) {
+  const SQL = `
+    SELECT 
+      DISTINCT sample
+    FROM dmm5t3 
+    ORDER BY sample DESC
+  `;
+
+  return sqlite3Wrapper.all(db, SQL);
+}
+
 // export function ipcDmmStart(db: sqlite3.Database, interval: any) {
 //
 // }

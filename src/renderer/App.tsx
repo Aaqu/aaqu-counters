@@ -9,6 +9,7 @@ import { Devices } from './components/pages/Devices/Devices';
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { ChartDmm } from './components/pages/ChartDmm/ChartDmm';
 
 export const App = () => {
   return (
@@ -19,6 +20,7 @@ export const App = () => {
         <Content>
           <Routes>
             <Route path="/" element={<Devices />} />
+            <Route path="/chart" element={<ChartDmm />} />
             {/* <Route path="/converters.html" element={<Converters />} /> */}
             {/* <Route path="/slaves.html" element={<Slaves />} /> */}
             {/* <Route path="/databases.html" element={<Databases />} /> */}

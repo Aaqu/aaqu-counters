@@ -13,6 +13,14 @@ export const Sidebar = () => {
       >
         DEVICES
       </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? `${styles.link} ${styles.active}` : styles.link
+        }
+        to="/chart"
+      >
+        CHART
+      </NavLink>
       {/* <NavLink */}
       {/*   className={({ isActive }) => */}
       {/*     isActive ? `${styles.link} ${styles.active}` : styles.link */}
