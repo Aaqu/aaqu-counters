@@ -115,67 +115,67 @@ export async function initializeHeadDb(path: string) {
     interval = undefined;
   });
 
-  ipcMain.on('dmm-export', async (event, args) => {
-    console.log('export');
+  // ipcMain.on('dmm-export', async (event, args) => {
+  //   console.log('export');
+  //
+  //   const result = await dialog.showOpenDialog({
+  //     properties: ['openFile', 'openDirectory'],
+  //   });
+  //   console.log(result);
+  //   if (!result.canceled) {
+  //     event.reply('info', { message: `start export` });
+  //     const names = await getDmm5t3Names(headDb);
+  //     const namesDate = names
+  //       .reduce((prev, curr) => {
+  //         prev.push(curr.name);
+  //         return prev;
+  //       }, [])
+  //       .join(',');
+  //
+  //     const response = await getDmm5t3(headDb, { sample: args[0].sample });
+  //     const date = response
+  //       .reduce((prev, curr) => {
+  //         prev.push(Object.values(curr).join(','));
+  //         return prev;
+  //       }, [])
+  //       .join('\n');
+  //
+  //     // console.log();
+  //     const fileName = `sample_${args[0].sample}_${+Date.now()}.csv`;
+  //     fs.writeFile(
+  //       `${result.filePaths}\\${fileName}`,
+  //       `${namesDate}\n${date}`,
+  //       (err) => {
+  //         if (err) {
+  //           event.reply('error', { message: `cannot save file: ${fileName}` });
+  //           return;
+  //         }
+  //         event.reply('info', { message: `save file: ${fileName}` });
+  //       }
+  //     );
+  //   } else {
+  //     event.reply('info', { message: `canceled export` });
+  //   }
+  // });
 
-    const result = await dialog.showOpenDialog({
-      properties: ['openFile', 'openDirectory'],
-    });
-    console.log(result);
-    if (!result.canceled) {
-      event.reply('info', { message: `start export` });
-      const names = await getDmm5t3Names(headDb);
-      const namesDate = names
-        .reduce((prev, curr) => {
-          prev.push(curr.name);
-          return prev;
-        }, [])
-        .join(',');
+  // ipcMain.on('dmm-chart', async (event, args) => {
+  //   const response = await getDmm5t3Chart(headDb, { sample: args[0].sample });
+  //   const datasets = response.map((row) => Object.values(row));
+  //   const labels = Object.keys(response[0]);
+  //   labels.shift();
+  //   event.reply('dmm-chart', {
+  //     datasets,
+  //     labels,
+  //   });
+  // });
 
-      const response = await getDmm5t3(headDb, { sample: args[0].sample });
-      const date = response
-        .reduce((prev, curr) => {
-          prev.push(Object.values(curr).join(','));
-          return prev;
-        }, [])
-        .join('\n');
-
-      // console.log();
-      const fileName = `sample_${args[0].sample}_${+Date.now()}.csv`;
-      fs.writeFile(
-        `${result.filePaths}\\${fileName}`,
-        `${namesDate}\n${date}`,
-        (err) => {
-          if (err) {
-            event.reply('error', { message: `cannot save file: ${fileName}` });
-            return;
-          }
-          event.reply('info', { message: `save file: ${fileName}` });
-        }
-      );
-    } else {
-      event.reply('info', { message: `canceled export` });
-    }
-  });
-
-  ipcMain.on('dmm-chart', async (event, args) => {
-    const response = await getDmm5t3Chart(headDb, { sample: args[0].sample });
-    const datasets = response.map((row) => Object.values(row));
-    const labels = Object.keys(response[0]);
-    labels.shift();
-    event.reply('dmm-chart', {
-      datasets,
-      labels,
-    });
-  });
-
-  ipcMain.on('dmm-samples', async (event) => {
-    const response = await getDmm5t3Samples(headDb);
-    const samples = response.map(({ sample }) => {
-      return { id: sample, value: sample, label: sample };
-    });
-    event.reply('dmm-samples', samples);
-  });
+  // ipcMain.on('dmm-samples', async (event) => {
+  //   const response = await getDmm5t3Samples(headDb);
+  //   const samples = response.map(({ sample }) => {
+  //     return { id: sample, value: sample, label: sample };
+  //   });
+  //   event.reply('dmm-samples', samples);
+  // });
 
   // ipcDmmStart(headDb, interval);
   // ipcDmmStop(headDb, interval);

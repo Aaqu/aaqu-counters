@@ -7,6 +7,7 @@ import { existsSync, openSync } from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { initializeHeadDb } from './database/initializeDb';
+import { initDatabase } from './db/database';
 
 class AppUpdater {
   constructor() {
@@ -26,7 +27,7 @@ if (process.env.NODE_ENV === 'production') {
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
-const dbPath = path.join(app.getPath('userData'), 'sql.db');
+export const dbPath = path.join(app.getPath('userData'), 'sql.db');
 if (!isDebug && !existsSync(dbPath)) {
   openSync(dbPath, 'w');
 }
@@ -122,6 +123,7 @@ app
   .then(() => {
     // initializeHeadDb(isDebug ? ':memory:' : dbPath);
     initializeHeadDb(dbPath);
+    initDatabase();
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
