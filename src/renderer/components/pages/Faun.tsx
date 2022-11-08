@@ -1,5 +1,5 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-import { useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 
 const DATA = {
   deviceTypes: ['D204MB', 'other'],
@@ -16,36 +16,23 @@ interface ElementProps {
 }
 
 const Element = ({ value }: ElementProps) => {
-  const [active, setActive] = useState(false);
+  const text = useRef(value);
 
-  const activeField = () => {
-    setActive(true);
+  const handleChange = (evt: ContentEditableEvent) => {
+    text.current = evt.target.value;
   };
 
-  const disableField = () => {
-    setActive(false);
+  const handleBlur = () => {
+    console.log(text.current);
   };
-
-  if (active) {
-    return (
-      <input
-        className="w-full"
-        type="text"
-        defaultValue={value}
-        onBlur={disableField}
-        autoFocus
-      />
-    );
-  }
 
   return (
-    <button
-      className="w-full text-left pl-1"
-      type="button"
-      onClick={activeField}
-    >
-      {value}
-    </button>
+    <ContentEditable
+      className="w-full"
+      html={text.current}
+      onBlur={handleBlur}
+      onChange={handleChange}
+    />
   );
 };
 
@@ -53,23 +40,29 @@ export const Faun = () => {
   const [data, setData] = useState(DATA);
 
   return (
-    <>
-      <div className="pl-2 py-2 border-b bg-slate-50 rounded-tr-lg">Faun</div>
-      <table className="w-full text-left text-sm">
-        <thead className="border-b bg-slate-50">
-          <tr className="bg-zinc-400">
+    <div className="grid flex-col justify-items-center">
+      <div className="pl-2 py-2 w-full border-b border-stone-300 rounded-tr-lg">
+        Faun - add device
+      </div>
+      <table className="mt-2 w-[98%] text-left text-sm">
+        <thead>
+          <tr className="border-y border-stone-300">
             {data.columns.map((column) => {
-              return <th className="pl-1">{column}</th>;
+              return (
+                <th className="p-1 border-x border-stone-300 first:border-none last:border-none">
+                  {column}
+                </th>
+              );
             })}
           </tr>
         </thead>
         <tbody>
           {data.rows.map((row) => {
             return (
-              <tr className="even:bg-zinc-300">
+              <tr className="border-y border-stone-300">
                 {Object.values(row).map((value) => {
                   return (
-                    <td className="border-r border-b w-1/4">
+                    <td className="p-1 border-x border-stone-300 first:border-none last:border-none w-1/4">
                       <Element value={value} />
                     </td>
                   );
@@ -77,8 +70,15 @@ export const Faun = () => {
               </tr>
             );
           })}
+          <tr className="border-y border-stone-300">
+            <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
+              <button className="w-8" type="button" title="Add row">
+                ...
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
