@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import {
   ColumnDef,
@@ -75,37 +75,46 @@ interface EditCellProps {
   value: string;
 }
 const EditCell = ({ value }: EditCellProps) => {
-  const [cell, setCell] = useState({
-    value,
-    edited: false,
-  });
+  // const [cell, setCell] = useState({
+  //   currentValue: value,
+  //   newValue: '',
+  //   edit: true,
+  // });
 
-  useEffect(() => {
-    if (cell.edited) {
-      console.log('edited');
-    }
-  }, [cell.edited]);
+  // const [current, setCurrent] = useState(value);
+  // const text = useRef(value);
+  // const store = useRef(value);
+
+  // useEffect(() => {
+  //   if (cell.set) {
+  //     console.log("setCell")
+  //     setCell((old) => ({
+  //       currentValue: old.newValue,
+  //       newValue: '',
+  //       set: false,
+  //     }));
+  //   }
+  // }, [cell.set]);
   //
-  // const onChange = (e: ContentEditableEvent) => {
-  //   // setValue(e.target.value);
-  // };
+  const onChange = (e: ContentEditableEvent) => {
+    // text.current = e.target.value;
+  };
 
-  const onBlur = (e) => {
-    setCell({
-      value: e.target.innerText.trim(),
-      edited: true,
-    });
+  const onBlur = () => {
+    console.log('blur start');
   };
 
   const onKeyDown = (e) => {
     switch (e.key) {
       case 'Escape':
-        setCell((old) => ({
-          value: old.value,
-          edited: false,
-        }));
+        console.log(e.key);
+        // text.current = store.current;
+        e.target.blur();
         break;
       case 'Enter':
+        e.preventDefault();
+        console.log(e.key);
+        // store.current = text.current;
         e.target.blur();
         break;
       default:
@@ -114,9 +123,10 @@ const EditCell = ({ value }: EditCellProps) => {
 
   return (
     <ContentEditable
-      html={(value && value.toString()) || ''}
+      html={value}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
+      onChange={onChange}
     />
   );
 };
