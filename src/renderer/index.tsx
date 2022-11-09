@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { App } from './App';
 
 const container = document.getElementById('root')!;
-const root = createRoot(container);
+const root = createRoot(container!);
 root.render(<App />);
 
 window.electron.ipcRenderer.on('error', (err) => {
