@@ -1,108 +1,95 @@
-// interface TableContentEditableProps {
-//   data: [];
-// }
-
 import { useState } from 'react';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+
 import { EditableCell } from './EditableCell';
 
-const columns: ColumnDef<Device>[] = [
+type Device = {
+  name: string;
+  type: string;
+  converter: string;
+  address: number;
+};
+
+const columns = [
   {
-    accessorKey: 'name',
-    cell: (info) => <EditableCell value={String(info.getValue())} />,
+    columnKey: 'name',
+    columnName: 'Name',
+    columnType: 'editableCell',
   },
   {
-    accessorKey: 'type',
-    cell: (info) => info.getValue(),
+    columnKey: 'type',
+    columnName: 'Type',
+    columnType: 'editableCell',
   },
   {
-    accessorKey: 'converter',
-    cell: (info) => info.getValue(),
+    columnKey: 'converter',
+    columnName: 'Converter',
+    columnType: 'editableCell',
   },
   {
-    accessorKey: 'address',
-    cell: (info) => info.getValue(),
+    columnKey: 'address',
+    columnName: 'Address',
+    columnType: 'editableCell',
   },
 ];
 
-export const EditableTable = () => {
-  const [data, setData] = useState(() => [...DATA]);
+interface EditableTableProps {
+  data: Device[];
+}
 
-  const table = useReactTable({
-    data,
-    columns,
-    enableColumnResizing: true,
-    columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
-  });
+export const EditableTable = ({ data: defaultData }: EditableTableProps) => {
+  const [data, setData] = useState(() => [...defaultData]);
+
+  const handleAddRow = () => {
+    const newRow = {
+      name: 'new-device',
+      type: '?',
+      converter: '?',
+      address: 0,
+    };
+
+    setData((old) => [...old, newRow]);
+  };
 
   return (
-    // <table className="mt-2 w-[98%] text-left text-sm">
-    //   <thead>
-    //   {table.getHeaderGroups().map((headerGroup) => (
-    //     <tr key={headerGroup.id} className="border-y border-stone-300">
-    //       {headerGroup.headers.map((header) => {
-    //         return (
-    //           <th
-    //             className="p-1 border-x border-stone-300 first:border-none last:border-none"
-    //             key={header.id}
-    //             colSpan={header.colSpan}
-    //             style={{ position: 'relative', width: header.getSize() }}
-    //           >
-    //             {header.isPlaceholder
-    //               ? null
-    //               : flexRender(
-    //                 header.column.columnDef.header,
-    //                 header.getContext()
-    //               )}
-    //             {header.column.getCanResize() && (
-    //               // TODO resolve this problem
-    //               // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    //               <div
-    //                 onMouseDown={header.getResizeHandler()}
-    //                 onTouchStart={header.getResizeHandler()}
-    //                 className={`resizer ${
-    //                   header.column.getIsResizing() ? 'isResizing' : ''
-    //                 }`}
-    //               />
-    //             )}
-    //           </th>
-    //         );
-    //       })}
-    //     </tr>
-    //   ))}
-    //   </thead>
-    //   <tbody>
-    //   {table.getRowModel().rows.map((row) => {
-    //     return (
-    //       <tr className="border-y border-stone-300" key={row.id}>
-    //         {row.getVisibleCells().map((cell) => {
-    //           return (
-    //             <td
-    //               className="p-1 border-x border-stone-300 first:border-none last:border-none"
-    //               key={cell.id}
-    //               style={{ width: cell.column.getSize() }}
-    //             >
-    //               {flexRender(
-    //                 cell.column.columnDef.cell,
-    //                 cell.getContext()
-    //               )}
-    //             </td>
-    //           );
-    //         })}
-    //       </tr>
-    //     );
-    //   })}
-    //   </tbody>
-    // </table>
-    <div />
+    <table className="mt-2 w-[98%] text-left text-sm">
+      <thead>
+        <tr className="border-y border-stone-300">
+          <th className="p-1 w-20 border-x border-stone-300 first:border-none last:border-none">
+            .
+          </th>
+          {columns.map(({ columnName, columnKey }) => (
+            <th
+              className="p-1 border-x border-stone-300 first:border-none last:border-none"
+              key={columnKey}
+            >
+              {columnName}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, index) => (
+          <tr className="border-y border-stone-300">
+            <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
+              {index}
+            </td>
+            {Object.values(row).map((value) => (
+              <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
+                <EditableCell value={String(value)} />
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr className="border-y border-stone-300">
+          <td className="p-1 border-x border-stone-300 first:border-none last:border-none text-slate-500">
+            <button className="w-8" type="button" onClick={handleAddRow}>
+              +
+            </button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
   );
 };

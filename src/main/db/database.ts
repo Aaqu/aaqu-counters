@@ -3,9 +3,11 @@ import log from 'electron-log';
 import fs from 'fs';
 import { db } from './client';
 import { Dmm5t3 } from './models/Dmm5t3';
+import { Faun } from './models/Faun';
 
 export const initDatabase = async () => {
   await Dmm5t3.sync();
+  await Faun.sync();
 
   // const row = Dmm5t3.build({ firstName: 'test', lastName: 'test' });
   // await row.save();
