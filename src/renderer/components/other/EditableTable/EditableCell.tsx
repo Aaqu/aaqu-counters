@@ -1,48 +1,56 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-
-import { useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 interface EditableCellProps {
-  initialValue: string;
+  value: string;
 }
-export const EditableCell = ({ initialValue }: EditableCellProps) => {
-  const textRef = useRef(null);
-  const inputRef = useRef(null);
-  const [value, setValue] = useState(initialValue);
-  const [editable, setEditble] = useState(false);
+export const EditableCell = ({ value: initialValue }: EditableCellProps) => {
+  const textRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [state, setState] = useState({
+    value: initialValue,
+    editable: false,
+  });
 
   const initEditable = () => {
-    setEditble(true);
+    setState((old) => ({
+      ...old,
+      editable: true,
+    }));
   };
 
   useEffect(() => {
     const textElement = textRef.current;
-    if (!editable) {
-      textElement.addEventListener('dblclick', initEditable);
+    const inputElement = inputRef.current;
+    textElement?.addEventListener('click', initEditable);
+
+    if (state.editable) {
+      inputElement?.select();
     }
     return () => {
-      textElement.removeEventListener('dblclick', initEditable);
+      textElement?.removeEventListener('click', initEditable);
     };
-  }, [editable]);
+  }, [state.editable]);
 
-  useEffect(() => {
-    if (editable) {
-      inputRef.current.select();
+  const handleInputOnBlur = () => {
+    if (inputRef.current) {
+      setState({
+        value: inputRef.current.value,
+        editable: false,
+      });
     }
-  }, [editable]);
-
-  const handleInputOnBlur = (e) => {
-    setValue(inputRef.current.value);
-    setEditble(false);
   };
 
-  const handleInputKeyDown = (e) => {
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'Escape':
-        setEditble(false);
+        setState((old) => ({
+          ...old,
+          editable: false,
+        }));
         break;
       case 'Enter':
-        e.target.blur();
+        e.currentTarget.blur();
         break;
       default:
         break;
@@ -51,17 +59,20 @@ export const EditableCell = ({ initialValue }: EditableCellProps) => {
 
   return (
     <>
-      {editable ? (
+      {state.editable ? (
         <input
+          className="w-full"
           ref={inputRef}
           type="text"
-          defaultValue={value}
+          defaultValue={state.value}
           onBlur={handleInputOnBlur}
           onKeyDown={handleInputKeyDown}
           autoFocus
         />
       ) : (
-        <div ref={textRef}>{value}</div>
+        <div className="w-full" ref={textRef}>
+          {state.value}
+        </div>
       )}
     </>
   );
