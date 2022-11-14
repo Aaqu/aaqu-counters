@@ -1,12 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import { CellContext } from '@tanstack/table-core';
+import { EditableCell } from '../other/EditableTable/EditableCell';
 
 // const DATA = {
 //   deviceTypes: ['D204MB', 'other'],
@@ -71,161 +63,16 @@ const DATA: Device[] = [
   },
 ];
 
-interface EditCellProps {
-  value: string;
-}
-const EditCell = ({ value }: EditCellProps) => {
-  // const [cell, setCell] = useState({
-  //   currentValue: value,
-  //   newValue: '',
-  //   edit: true,
-  // });
-
-  // const [current, setCurrent] = useState(value);
-  // const text = useRef(value);
-  // const store = useRef(value);
-
-  // useEffect(() => {
-  //   if (cell.set) {
-  //     console.log("setCell")
-  //     setCell((old) => ({
-  //       currentValue: old.newValue,
-  //       newValue: '',
-  //       set: false,
-  //     }));
-  //   }
-  // }, [cell.set]);
-  //
-  const onChange = (e: ContentEditableEvent) => {
-    // text.current = e.target.value;
-  };
-
-  const onBlur = () => {
-    console.log('blur start');
-  };
-
-  const onKeyDown = (e) => {
-    switch (e.key) {
-      case 'Escape':
-        console.log(e.key);
-        // text.current = store.current;
-        e.target.blur();
-        break;
-      case 'Enter':
-        e.preventDefault();
-        console.log(e.key);
-        // store.current = text.current;
-        e.target.blur();
-        break;
-      default:
-    }
-  };
-
-  return (
-    <ContentEditable
-      html={value}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
-      onChange={onChange}
-    />
-  );
-};
-
-const columns: ColumnDef<Device>[] = [
-  {
-    accessorKey: 'name',
-    cell: (info) => <EditCell value={String(info.getValue())} />,
-  },
-  {
-    accessorKey: 'type',
-    cell: (info) => info.getValue(),
-  },
-  {
-    accessorKey: 'converter',
-    cell: (info) => info.getValue(),
-  },
-  {
-    accessorKey: 'address',
-    cell: (info) => info.getValue(),
-  },
-];
 export const Faun = () => {
-  const [data, setData] = useState(() => [...DATA]);
-
-  const table = useReactTable({
-    data,
-    columns,
-    enableColumnResizing: true,
-    columnResizeMode: 'onChange',
-    getCoreRowModel: getCoreRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
-  });
-
   return (
     <div className="grid flex-col justify-items-center">
       <div className="pl-2 py-2 w-full border-b border-stone-300 rounded-tr-lg">
         Faun - add device
       </div>
-      <table className="mt-2 w-[98%] text-left text-sm">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="border-y border-stone-300">
-              {headerGroup.headers.map((header) => {
-                return (
-                  <th
-                    className="p-1 border-x border-stone-300 first:border-none last:border-none"
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    style={{ position: 'relative', width: header.getSize() }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    {header.column.getCanResize() && (
-                      // TODO resolve this problem
-                      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                      <div
-                        onMouseDown={header.getResizeHandler()}
-                        onTouchStart={header.getResizeHandler()}
-                        className={`resizer ${
-                          header.column.getIsResizing() ? 'isResizing' : ''
-                        }`}
-                      />
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <tr className="border-y border-stone-300" key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <td
-                      className="p-1 border-x border-stone-300 first:border-none last:border-none"
-                      key={cell.id}
-                      style={{ width: cell.column.getSize() }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+
+      <EditableCell value="test1" />
+      <EditableCell value="test2" />
+      <EditableCell value="test3" />
     </div>
   );
 };
