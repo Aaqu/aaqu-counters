@@ -4,5 +4,5 @@ import { Sequelize } from 'sequelize';
 export const db = new Sequelize({
   dialect: 'sqlite',
   storage: './sql.db',
-  logging: false,
+  // logging: false,
 });

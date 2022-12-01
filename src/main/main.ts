@@ -122,7 +122,7 @@ app
   .whenReady()
   .then(() => {
     // initializeHeadDb(isDebug ? ':memory:' : dbPath);
-    initializeHeadDb(dbPath);
+    // initializeHeadDb(dbPath);
     initDatabase();
     createWindow();
     app.on('activate', () => {

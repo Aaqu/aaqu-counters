@@ -17,6 +17,7 @@ export type Channels =
   | 'dmm-export'
   | 'dmm-chart'
   | 'dmm-samples'
+  | 'faun-list'
   | 'info'
   | 'error';
 

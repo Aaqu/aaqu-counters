@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { EditableCell } from './EditableCell';
 
 type Device = {
+  id?: number;
   name: string;
   type: string;
   converter: string;
@@ -36,8 +37,14 @@ interface EditableTableProps {
   data: Device[];
 }
 
-export const EditableTable = ({ data: defaultData }: EditableTableProps) => {
-  const [data, setData] = useState(() => [...defaultData]);
+export const EditableTable = ({ data }: EditableTableProps) => {
+  const [tableRows, setTableRows] = useState(data);
+
+  useEffect(() => {
+    setTableRows(data);
+  }, [data]);
+
+  // const [data, setData] = useState(() => [...defaultData]);
 
   const handleAddRow = () => {
     const newRow = {
@@ -47,7 +54,7 @@ export const EditableTable = ({ data: defaultData }: EditableTableProps) => {
       address: 0,
     };
 
-    setData((old) => [...old, newRow]);
+    setTableRows((old) => [...old, newRow]);
   };
 
   return (
@@ -68,16 +75,18 @@ export const EditableTable = ({ data: defaultData }: EditableTableProps) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row, index) => (
+        {tableRows.map((row) => (
           <tr className="border-y border-stone-300">
             <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
-              {index}
+              {row.id}
             </td>
-            {Object.values(row).map((value) => (
-              <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
-                <EditableCell value={String(value)} />
-              </td>
-            ))}
+            {Object.values(row)
+              .slice(1)
+              .map((value) => (
+                <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
+                  <EditableCell value={String(value)} />
+                </td>
+              ))}
           </tr>
         ))}
       </tbody>

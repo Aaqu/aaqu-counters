@@ -4,13 +4,53 @@ import fs from 'fs';
 import { db } from './client';
 import { Dmm5t3 } from './models/Dmm5t3';
 import { Faun } from './models/Faun';
+import { Version } from './models/Version';
+import { Converter } from './models/Converter';
 
 export const initDatabase = async () => {
-  await Dmm5t3.sync();
-  await Faun.sync();
+  try {
+    // Faun.hasMany(Converter, { foreignKey: 'converterId' });
+    // Faun.hasMany(Converter, { foreignKey: 'converterId' });
+    // Converter.belongsTo(Faun);
+
+    // Faun.belongsTo(Converter, { foreignKey: 'converterId' });
+    // Faun.hasMany(Converter, { as: 'converterId' });
+
+    await db.sync({ force: true });
+
+    Faun.belongsTo(Converter, {
+      foreignKey: 'converterId',
+    });
+    Converter.hasMany(Faun);
+  } catch (error) {
+    console.log(error);
+  }
 
   // const row = Dmm5t3.build({ firstName: 'test', lastName: 'test' });
   // await row.save();
+
+  const versionFaun = await Version.findOne({
+    where: { page: 'faun' },
+    raw: true,
+  });
+  if (versionFaun === null) {
+    await Version.create({ page: 'faun', version: 'v0.1.0' });
+    await Faun.create({
+      name: 'device1',
+      type: 'D204MB',
+      converterId: '1',
+      address: 1,
+    });
+  }
+
+  const versionConverter = await Version.findOne({
+    where: { page: 'converter' },
+    raw: true,
+  });
+  if (versionConverter === null) {
+    await Version.create({ page: 'converter', version: 'v0.1.0' });
+    await Converter.create({ type: 'TCP', address: '192.168.1.7', port: 500 });
+  }
 
   // @TODO find better solution for type error
   ipcMain.on('dmm-chart', async (event, args) => {
@@ -223,6 +263,24 @@ export const initDatabase = async () => {
           event.reply('info', { message: `save file: ${fileName}` });
         }
       );
+    } catch (err: any) {
+      log.error(err.message);
+    }
+  });
+
+  ipcMain.on('faun-list', async (event) => {
+    console.log('faun-list');
+    try {
+      const fauns = await Faun.findAll({
+        include: Converter,
+        // order: [['id', 'ASC']],
+        // raw: true,
+      });
+
+      const clearData = fauns.every((faun) => faun instanceof Faun);
+
+      console.log(clearData);
+      event.reply('faun-list', fauns);
     } catch (err: any) {
       log.error(err.message);
     }

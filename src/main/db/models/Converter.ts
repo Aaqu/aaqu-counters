@@ -6,40 +6,35 @@ import {
 } from 'sequelize';
 import { db } from '../client';
 
-interface FaunModel
+interface ConverterModel
   extends Model<
-    InferAttributes<FaunModel>,
-    InferCreationAttributes<FaunModel>
+    InferAttributes<ConverterModel>,
+    InferCreationAttributes<ConverterModel>
   > {
   id?: number;
-  name: string;
   type: string;
-  converterId: string;
-  address: number;
+  address: string;
+  port: number;
 }
 
-export const Faun = db.define<FaunModel>(
-  'faun',
+export const Converter = db.define<ConverterModel>(
+  'converter',
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    converterId: {
+    address: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    address: {
-      type: DataTypes.INTEGER,
+    port: {
+      type: DataTypes.NUMBER,
       allowNull: false,
     },
   },
