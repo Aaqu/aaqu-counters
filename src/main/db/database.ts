@@ -1,6 +1,7 @@
 import { dialog, ipcMain } from 'electron';
 import log from 'electron-log';
 import fs from 'fs';
+import { fn, col, Sequelize } from 'sequelize';
 import { db } from './client';
 import { Dmm5t3 } from './models/Dmm5t3';
 import { Faun } from './models/Faun';
@@ -9,19 +10,13 @@ import { Converter } from './models/Converter';
 
 export const initDatabase = async () => {
   try {
-    // Faun.hasMany(Converter, { foreignKey: 'converterId' });
-    // Faun.hasMany(Converter, { foreignKey: 'converterId' });
-    // Converter.belongsTo(Faun);
-
-    // Faun.belongsTo(Converter, { foreignKey: 'converterId' });
-    // Faun.hasMany(Converter, { as: 'converterId' });
-
     await db.sync({ force: true });
+    console.log('re-sync done!');
 
-    Faun.belongsTo(Converter, {
+    Converter.hasMany(Faun, {
       foreignKey: 'converterId',
     });
-    Converter.hasMany(Faun);
+    Faun.belongsTo(Converter);
   } catch (error) {
     console.log(error);
   }
@@ -269,17 +264,28 @@ export const initDatabase = async () => {
   });
 
   ipcMain.on('faun-list', async (event) => {
-    console.log('faun-list');
     try {
       const fauns = await Faun.findAll({
-        include: Converter,
-        // order: [['id', 'ASC']],
-        // raw: true,
+        include: [
+          {
+            model: Converter,
+          },
+        ],
+        attributes: [
+          'id',
+          'name',
+          'type',
+          'address',
+          [
+            db.literal(`converter.address || ':' || converter.port`),
+            'converter',
+          ],
+        ],
+        raw: true,
+        nest: true,
       });
 
-      const clearData = fauns.every((faun) => faun instanceof Faun);
-
-      console.log(clearData);
+      console.log(fauns);
       event.reply('faun-list', fauns);
     } catch (err: any) {
       log.error(err.message);

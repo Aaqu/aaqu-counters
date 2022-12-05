@@ -20,11 +20,11 @@ interface ConverterModel
 export const Converter = db.define<ConverterModel>(
   'converter',
   {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
+    // id: {
+    //   type: DataTypes.INTEGER,
+    //   autoIncrement: true,
+    //   primaryKey: true,
+    // },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
