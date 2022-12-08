@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { EditableCell } from './EditableCell';
+import { EditableCellOld } from './EditableCellOld';
 
 type Device = {
   id?: number;
@@ -37,7 +37,7 @@ interface EditableTableProps {
   data: Device[];
 }
 
-export const EditableTable = ({ data }: EditableTableProps) => {
+export const EditableTableOld = ({ data }: EditableTableProps) => {
   const [tableRows, setTableRows] = useState(data);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const EditableTable = ({ data }: EditableTableProps) => {
               .slice(1)
               .map((value) => (
                 <td className="p-1 border-x border-stone-300 first:border-none last:border-none">
-                  <EditableCell value={String(value)} />
+                  <EditableCellOld value={String(value)} />
                 </td>
               ))}
           </tr>

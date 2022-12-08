@@ -22,9 +22,11 @@ export const App = () => {
             <Sidebar />
             <Content>
               <Routes>
-                <Route path="/" element={<Devices />} />
-                <Route path="/chart" element={<ChartDmm />} />
+                <Route path="/" element={<Faun />} />
+                {/* <Route path="/" element={<Devices />} /> */}
+                {/* <Route path="/chart" element={<ChartDmm />} /> */}
                 <Route path="/faun" element={<Faun />} />
+
                 {/* <Route path="/converters.html" element={<Converters />} /> */}
                 {/*  <Route path="/slaves.html" element={<Slaves />} /> */}
                 {/* <Route path="/databases.html" element={<Databases />} /> */}

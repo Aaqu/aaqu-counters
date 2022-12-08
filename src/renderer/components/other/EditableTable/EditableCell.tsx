@@ -1,79 +1,43 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+// import { useState, useRef, useEffect } from "react";
 
-interface EditableCellProps {
-  value: string;
-}
-export const EditableCell = ({ value: initialValue }: EditableCellProps) => {
-  const textRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [state, setState] = useState({
-    value: initialValue,
-    editable: false,
-  });
+// export const Table = () => {
+//   const [content, setContent] = useState("device1");
+//   const [width, setWidth] = useState(50);
+//   const span = useRef();
 
-  const initEditable = () => {
-    setState((old) => ({
-      ...old,
-      editable: true,
-    }));
-  };
+//   useEffect(() => {
+//     const x = span.current.offsetWidth;
+//     if (x < 150) {
+//       setWidth(x);
+//     }
+//   }, [content]);
 
-  useEffect(() => {
-    const textElement = textRef.current;
-    const inputElement = inputRef.current;
-    textElement?.addEventListener('click', initEditable);
+//   const changeHandler = (evt) => {
+//     setContent(evt.target.value);
+//   };
 
-    if (state.editable) {
-      inputElement?.select();
-    }
-    return () => {
-      textElement?.removeEventListener('click', initEditable);
-    };
-  }, [state.editable]);
+//   return (
+//     <div>
+//       <input
+//         ref={span}
+//         type="text"
+//         style={{ width }}
+//         autoFocus
+//         onChange={changeHandler}
+//         defaultValue={content}
+//       />
+//     </div>
+//   );
 
-  const handleInputOnBlur = () => {
-    if (inputRef.current) {
-      setState({
-        value: inputRef.current.value,
-        editable: false,
-      });
-    }
-  };
-
-  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    switch (e.key) {
-      case 'Escape':
-        setState((old) => ({
-          ...old,
-          editable: false,
-        }));
-        break;
-      case 'Enter':
-        e.currentTarget.blur();
-        break;
-      default:
-        break;
-    }
-  };
-
-  return (
-    <>
-      {state.editable ? (
-        <input
-          className="w-full"
-          ref={inputRef}
-          type="text"
-          defaultValue={state.value}
-          onBlur={handleInputOnBlur}
-          onKeyDown={handleInputKeyDown}
-          autoFocus
-        />
-      ) : (
-        <div className="w-full" ref={textRef}>
-          {state.value}
-        </div>
-      )}
-    </>
-  );
-};
+//   // return (
+//   //   <>
+//   //     {editable ? (
+//   //       <form onSubmit={handleSubmit}>
+//   //         <input type="text" name="newText" autoFocus />
+//   //       </form>
+//   //     ) : (
+//   //       <div onClick={handleClick}>{text}</div>
+//   //     )}
+//   //   </>
+//   // );
+// };

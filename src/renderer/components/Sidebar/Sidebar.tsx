@@ -1,8 +1,8 @@
 import { PagesList } from './PagesList';
 
 const pages = [
-  { name: 'Dmm', href: '/' },
-  { name: 'Chart', href: '/chart' },
+  // { name: 'Dmm', href: '/' },
+  // { name: 'Chart', href: '/chart' },
   { name: 'Faun', href: '/faun' },
 ];
 
