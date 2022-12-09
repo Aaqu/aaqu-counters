@@ -3,20 +3,25 @@ interface SelectCellProps {
     id: number;
     option: string;
   }[];
+  selected: number;
 }
 
-export const SelectCell = ({ options }: SelectCellProps) => {
+export const SelectCell = ({ options, selected }: SelectCellProps) => {
   const optionsList = options.map((option) => {
     return (
-      <option key={option.id} value={option.id}>
+      <option
+        key={option.id}
+        value={option.id}
+        selected={option.id === selected}
+      >
         {option.option}
       </option>
     );
   });
 
   return (
-    <tr>
-      <select>{optionsList}</select>
-    </tr>
+    <td>
+      <select className="w-full">{optionsList}</select>
+    </td>
   );
 };

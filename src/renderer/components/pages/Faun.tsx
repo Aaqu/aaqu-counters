@@ -6,6 +6,7 @@ const tableColumns = [
   {
     column: 'id',
     name: 'id',
+    width: 'w-16',
   },
   {
     column: 'name',
@@ -13,14 +14,18 @@ const tableColumns = [
     type: 'editable',
   },
   {
-    column: 'deviceId',
+    column: 'typeId',
     name: 'Device',
     type: 'select',
+    selectData: 'typeIds',
+    width: 'w-36',
   },
   {
     column: 'converterId',
     name: 'Converter',
     type: 'select',
+    selectData: 'converterIds',
+    width: 'w-36',
   },
   {
     column: 'address',
@@ -28,16 +33,17 @@ const tableColumns = [
     type: 'min-max',
     min: 1,
     max: 255,
+    width: 'w-8',
   },
 ];
 const tableValues = {
-  deviceTypes: [
+  typeIds: [
     {
       id: 1,
       option: 'D204MB',
     },
   ],
-  converters: [
+  converterIds: [
     {
       id: 1,
       option: '192.168.1.7:500',
@@ -52,14 +58,14 @@ const tableValues = {
       id: 1,
       name: 'device-1',
       typeId: 1,
-      converterId: 1,
+      converterId: 2,
       address: 1,
     },
     {
       id: 2,
       name: 'device-2',
       typeId: 1,
-      converterId: 1,
+      converterId: 2,
       address: 2,
     },
   ],

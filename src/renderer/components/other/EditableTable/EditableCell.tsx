@@ -1,43 +1,82 @@
-// import { useState, useRef, useEffect } from "react";
+/* eslint-disable jsx-a11y/no-autofocus */
 
-// export const Table = () => {
-//   const [content, setContent] = useState("device1");
-//   const [width, setWidth] = useState(50);
-//   const span = useRef();
+import {
+  useState,
+  useRef,
+  useEffect,
+  ChangeEventHandler,
+  ChangeEvent,
+} from 'react';
 
-//   useEffect(() => {
-//     const x = span.current.offsetWidth;
-//     if (x < 150) {
-//       setWidth(x);
-//     }
-//   }, [content]);
+interface EditableCellProps {
+  defaultValue: string;
+}
 
-//   const changeHandler = (evt) => {
-//     setContent(evt.target.value);
-//   };
+export const EditableCell = ({ defaultValue }: EditableCellProps) => {
+  const [editable, setEditable] = useState(false);
+  const [content, setContent] = useState(defaultValue);
+  // const [width, setWidth] = useState(50);
+  const spanRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>();
 
-//   return (
-//     <div>
-//       <input
-//         ref={span}
-//         type="text"
-//         style={{ width }}
-//         autoFocus
-//         onChange={changeHandler}
-//         defaultValue={content}
-//       />
-//     </div>
-//   );
+  // useEffect(() => {
+  //   if (!editable) {
+  //     return;
+  //   }
+  //   // const x = inputRef.current.offsetWidth;
+  //   // if (x < 150) {
+  //   //   setWidth(x);
+  //   // }
+  // }, [content, editable]);
 
-//   // return (
-//   //   <>
-//   //     {editable ? (
-//   //       <form onSubmit={handleSubmit}>
-//   //         <input type="text" name="newText" autoFocus />
-//   //       </form>
-//   //     ) : (
-//   //       <div onClick={handleClick}>{text}</div>
-//   //     )}
-//   //   </>
-//   // );
-// };
+  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
+  };
+
+  const initEditable = () => {
+    setEditable(true);
+  };
+
+  useEffect(() => {
+    const spanValue = spanRef.current;
+    const inputValue = inputRef.current;
+
+    spanValue?.addEventListener('click', initEditable);
+    if (editable) {
+      inputValue?.select();
+    }
+    return () => {
+      spanValue?.removeEventListener('click', initEditable);
+    };
+  }, [editable]);
+
+  return (
+    <td>
+      {editable ? (
+        <input
+          ref={inputRef}
+          type="text"
+          className="width-"
+          // style={{ width }}
+          autoFocus
+          onChange={changeHandler}
+          defaultValue={content}
+        />
+      ) : (
+        <span ref={spanRef}>{content}</span>
+      )}
+    </td>
+  );
+
+  // return (
+  //   <>
+  //     {editable ? (
+  //       <form onSubmit={handleSubmit}>
+  //         <input type="text" name="newText" autoFocus />
+  //       </form>
+  //     ) : (
+  //       <div onClick={handleClick}>{text}</div>
+  //     )}
+  //   </>
+  // );
+};

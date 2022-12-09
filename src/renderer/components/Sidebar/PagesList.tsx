@@ -11,7 +11,7 @@ export const PagesList = ({ data }: PagesListPros) => {
   return (
     <ul>
       {data.map(({ name, href }) => (
-        <li className="flex ">
+        <li key={href} className="flex ">
           <NavLink
             className={({ isActive }) =>
               isActive
